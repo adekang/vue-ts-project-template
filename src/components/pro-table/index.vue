@@ -4,7 +4,7 @@ import { Check, Close, Edit } from '@element-plus/icons-vue'
 import cloneDeep from 'lodash/cloneDeep'
 import type { ProTableOptions } from './table-types'
 
-const props = defineProps<{
+interface Props {
   options: ProTableOptions[] // table options
   data: any[] // table data
   elementLoadingText?: string // 显示在加载图标下方的加载文案
@@ -14,43 +14,26 @@ const props = defineProps<{
   editIcon?: string // 可编辑单元格的图标 (默认为 edit) 首字母大写 TODO
   isEditRow?: boolean // 是否可编辑行
   editRowIndex?: string // 可编辑行的唯一标识
-}>()
+  pageSizes?: number[] // 每页显示个数的集合
+  total?: number // 总条数
+  pagination?: boolean // 是否显示分页
+  paginationAlign?: 'left' | 'center' | 'right' // 分页的排列方式
+}
 
-// const props = defineProps({
-//   options: {
-//     type: Array as PropType<ProTableOptions[]>,
-//     required: true,
-//   },
-//   data: {
-//     type: Array,
-//     required: true,
-//   },
-//   elementLoadingText: {
-//     type: String,
-//   },
-//   elementLoadingSpinner: {
-//     type: String,
-//   },
-//   elementLoadingBackground: {
-//     type: String,
-//   },
-//   elementLoadingSvg: {
-//     type: String,
-//   },
-//   editIcon: {
-//     type: String,
-//     default: 'Edit',
-//   },
-//   isEditRow: {
-//     type: Boolean,
-//     default: false,
-//   },
-//   editRowIndex: {
-//     type: String,
-//   },
-// })
+const props = withDefaults(defineProps<Props>(), {
+  paginationAlign: 'center',
+  pagination: false,
+  isEditRow: false,
+  editIcon: 'Edit',
+  editRowIndex: '',
+  pageSizes: () => [10, 20, 30, 40],
+  total: 0,
+})
 
 const emits = defineEmits(['confirm', 'cancel', 'update:editRowIndex'])
+const currentPage = defineModel<number>('currentPage', { type: Number, default: 1 })
+const pageSize = defineModel<number>('pageSize', { type: Number, default: 10 })
+
 // 可编辑的唯一标识
 const currentEdit = ref<string>('')
 
@@ -128,6 +111,23 @@ function clickRow(row: any, column: any) {
 watch(() => currentEdit.value, (val) => {
   console.log('可编辑单元格：：', val)
 })
+
+function handleCurrentChange(val: number) {
+  currentPage.value = val
+}
+
+function handleSizeChange(val: number) {
+  pageSize.value = val
+}
+
+// 表格分页的排列方式
+const justifyContent = computed(() => {
+  if (props.paginationAlign === 'left')
+    return 'flex-start'
+  else if (props.paginationAlign === 'right')
+    return 'flex-end'
+  else return 'center'
+})
 </script>
 
 <template>
@@ -138,6 +138,7 @@ watch(() => currentEdit.value, (val) => {
     :element-loading-spinner
     :element-loading-svg
     :element-loading-background
+    v-bind="$attrs"
     @row-click="clickRow"
   >
     <template v-for="(item, index) in tableOptions" :key="index">
@@ -182,6 +183,18 @@ watch(() => currentEdit.value, (val) => {
       </template>
     </el-table-column>
   </el-table>
+
+  <div v-if="pagination && !isLoading" class="pagination" :style="{ justifyContent }">
+    <el-pagination
+      v-model:current-page="currentPage"
+      v-model:page-size="pageSize"
+      :page-sizes="pageSizes"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
 </template>
 
 <style scoped>
@@ -202,5 +215,11 @@ cursor: pointer;
 margin-left: 6px;
 color: green;
 cursor: pointer;
+}
+
+.pagination{
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
 }
 </style>

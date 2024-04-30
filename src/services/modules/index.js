@@ -1,8 +1,11 @@
 import request from '@/services/request/index.js'
 
-export function requestPostApi(data) {
-  return request.post({
-    url: '/hi',
-    data,
+export function getDemoListApi(page, pageSize) {
+  return request.get({
+    url: '/table/getDemoList',
+    params: {
+      page,
+      pageSize,
+    },
   })
 }

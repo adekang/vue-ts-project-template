@@ -4,14 +4,22 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('@/pages/layout.vue'),
+    component: () => import('@/pages/layout/index.vue'),
     children: [
       {
-        path: '/',
-        name: 'index',
+        path: '/home',
+        name: 'home',
         component: () => import('@/pages/home/index.vue'),
         meta: {
           title: '首页',
+        },
+      },
+      {
+        path: '/table',
+        name: 'table',
+        component: () => import('@/pages/table/index.vue'),
+        meta: {
+          title: 'table',
         },
       },
     ],
