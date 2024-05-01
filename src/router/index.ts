@@ -22,6 +22,14 @@ const routes: RouteRecordRaw[] = [
           title: 'table',
         },
       },
+      {
+        path: '/form',
+        name: 'form',
+        component: () => import('@/pages/form/index.vue'),
+        meta: {
+          title: 'form',
+        },
+      },
     ],
   },
   {

@@ -16,6 +16,11 @@ const data = [
     name: 'Pro 表格',
     index: '/table',
   },
+  {
+    icon: 'ShoppingBag',
+    name: 'Pro form',
+    index: '/form',
+  },
 ]
 </script>
 
