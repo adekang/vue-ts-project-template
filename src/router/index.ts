@@ -30,6 +30,14 @@ const routes: RouteRecordRaw[] = [
           title: 'form',
         },
       },
+      {
+        path: '/chooseArea',
+        name: 'chooseArea',
+        component: () => import('@/pages/chooseArea/index.vue'),
+        meta: {
+          title: 'chooseArea',
+        },
+      },
     ],
   },
   {

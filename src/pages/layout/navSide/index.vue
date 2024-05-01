@@ -21,6 +21,11 @@ const data = [
     name: 'Pro form',
     index: '/form',
   },
+  {
+    icon: 'ShoppingBag',
+    name: 'chooseArea',
+    index: '/chooseArea',
+  },
 ]
 </script>
 
