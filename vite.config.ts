@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { viteMockServe } from 'vite-plugin-mock'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
@@ -28,10 +27,6 @@ export default defineConfig(({ mode }) => {
         dts: 'types/components.d.ts',
         dirs: ['src/components'],
         resolvers: [ElementPlusResolver()],
-      }),
-      viteMockServe({
-        mockPath: './mock/', // 设置模拟数据的存储文件夹
-        logger: true, // 是否在控制台显示请求日志
       }),
     ],
     resolve: {

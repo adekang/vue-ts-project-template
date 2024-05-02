@@ -10,5 +10,6 @@ export default antfu({
   ignores: [
     // ...globs
     './types/*',
+    './public/mockServiceWorker.js',
   ],
 })
